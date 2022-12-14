@@ -1,0 +1,121 @@
+
+###
+post http://localhost:1337/register
+Content-Type: application/json
+
+{
+    "username": "chand",
+    "password": "chand54",
+    "email_id": "chand..."
+}
+
+###
+post http://localhost:1337/login
+Content-Type: application/json
+
+{
+    "username":"harsha",
+    "password":"harsha_hook"
+}
+
+###
+get http://localhost:1337/logout
+        
+###
+post http://localhost:1337/feed
+Content-Type: application/json
+
+{
+    "content":"England's umpteenth batting collapse in Hobart and their meek concession of the series also kind of left their victors a little unsure of their own supremacy"
+}
+
+###
+get http://localhost:1337/feed
+
+###
+get http://localhost:1337/feed/1
+
+
+###
+post http://localhost:1337/like
+
+###
+get http://localhost:1337/network
+
+###
+post http://localhost:1337/network/pending-connection
+Content-Type: application/json
+
+{
+    "celebrity":1
+}
+
+###
+post http://localhost:1337/network/new-connection
+Content-Type: application/json
+
+{
+    "fan":11
+}
+
+###
+get http://localhost:1337/network/my-connections
+
+###
+post http://localhost:1337/network/decline-connection
+Content-Type: application/json
+
+{
+    "enemy":9
+}
+
+###
+get http://localhost:1337/profile/profile-details
+
+### 
+post http://localhost:1337/profile/view-profile
+Content-Type: application/json
+
+{
+    "view_user":"harsha"
+}
+
+###
+post http://localhost:1337/profile/del-request
+Content-Type: application/json
+
+{
+    "celebrity":2
+}
+
+###
+post http://localhost:1337/profile/del-connection
+Content-Type: application/json
+
+{
+   "other":11
+}
+
+###
+post http://localhost:1337/post/likes
+Content-Type: application/json
+
+{
+    "post_id":1
+}
+
+###
+post http://localhost:1337/post/dislikes
+Content-Type: application/json
+
+{
+    "post_id":1
+}
+
+###
+get http://localhost:1337/post/likes/1
+
+
+
+
+
