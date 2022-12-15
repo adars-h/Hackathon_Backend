@@ -4,9 +4,9 @@ post http://localhost:1337/register
 Content-Type: application/json
 
 {
-    "username": "chand",
+    "username": "shadar",
     "password": "chand54",
-    "email_id": "chand@gmail.com"
+    "email_id": "adarsh333reddy@gmail.com"
 }
 
 ###

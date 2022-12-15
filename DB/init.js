@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 // Connection URL
-const url =
-    "mongodb+srv://sanath:c110vhzTBzFdNwFa@cluster0.dbuwwtz.mongodb.net/?retryWrites=true&w=majority";
+
+const url = process.env.MONGODB_URL;
 
 async function initDatabase() {
     mongoose.set("strictQuery", false);
