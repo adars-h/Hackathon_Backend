@@ -1,17 +1,26 @@
 const {
-  CreateUser,
-  GetUser,
-} = require("../../DB/DB.Tables/DAO-users");
-const { checkIfLogin, performLogin,performLogout} = require("../../Services/Auth/LoginService");
+  createUser,
+  getUser,
+} = require("../../DB/models/User.js");
 
-async function HandleUserRegister(req, res,next) {
-  const { username, password, email_id } = req.body;
-  const date=new Date()
+// const { 
+//   checkIfLogin, 
+//   performLogin,
+//   performLogout
+// } = require("../../Services/Auth/LoginService");
+
+async function HandleUserRegister(req,res,next) {
+  const { 
+    username, 
+    password, 
+    email_id 
+  } = req.body;
+  
   GetUser(username)
     .then(async (result) => {
-      if (result===undefined) {
+      if ( result === undefined ) {
         try {
-          await CreateUser(username, password, email_id,date);
+          await createUser(username, password, email_id);
           performLogin(res,req.body.username, req.body.password) 
           .then( (token) => {
             res.status(200);

@@ -1,16 +1,14 @@
 const express = require('express');
 const xss = require('xss-clean');
 const cookieParser = require('cookie-parser');
-const bodyParser=require('body-parser')
+const bodyParser = require('body-parser')
 const cors = require('cors')
 
 
 
 function ServerInit(conf) {
     const app = express();
-    // app.use(cors({credentials:true,origin:true}))
-    
-
+    app.use(cors({credentials:true,origin:true}))
     app.use(xss());
     app.use
 
@@ -20,7 +18,6 @@ function ServerInit(conf) {
     })
 
     app.enable("trust proxy");
-
     app.use(express.json({extended: true}));
     app.use(express.urlencoded({extended : true}));
     app.use(cookieParser());

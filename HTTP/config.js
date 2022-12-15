@@ -1,6 +1,14 @@
-const mysql=require('mysql2')
-const conf=require('./ConfigInit')
+const mongoose = require('mongoose');
 
-const mysql_pool = mysql.createConnection('mysql://u7dipojfbgepnwbw:UWlkjLp2xL1xCZCSfRIt@b2lrjfmiy7qzs9sc0ge6-mysql.services.clever-cloud.com:3306/b2lrjfmiy7qzs9sc0ge6');
+// Connection URL
+const url = 'mongodb+srv://adarsh:KPD09EyQF5kqTvVD@cluster0.dbuwwtz.mongodb.net/?retryWrites=true&w=majority';
 
-module.exports=mysql_pool
+
+async function main() {
+  mongoose.set('strictQuery', false);
+  await mongoose.connect(url);
+  console.log('Connected successfully to server');
+  return 'done.';
+}
+
+modules.exports = main;
