@@ -16,25 +16,18 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-function getUser(username) {
-    User.findOne({username:username})
-    .then(user => {
-        if ( !user ) 
-         return undefined;
-        else 
-         return user;
-    })
-    .catch(err => console.log(err));
+async function getUser(username) {
+    const data = await User.findOne({username:username});
+    return data;
 }
 
-function createUser(username,email_id,password) {
-      User.create({
+async function createUser(username,email_id,password) {
+      const data = await User.create({
         emailId: email_id,
         username: username,
         password: password,
-     }).then(data => {
-        return data;
-     }).catch(err => next(err));
+     })
+     return data;
 }
 
 module.exports = {

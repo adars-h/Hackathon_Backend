@@ -3,11 +3,10 @@ const {
   getUser,
 } = require("../../DB/models/User.js");
 
-// const { 
-//   checkIfLogin, 
-//   performLogin,
-//   performLogout
-// } = require("../../Services/Auth/LoginService");
+const { 
+  checkIfLogin, 
+  performLogin
+} = require("../../Services/Auth/LoginService");
 
 async function HandleUserRegister(req,res,next) {
   const { 
@@ -16,12 +15,12 @@ async function HandleUserRegister(req,res,next) {
     email_id 
   } = req.body;
   
-  GetUser(username)
-    .then(async (result) => {
-      if ( result === undefined ) {
+  const result = await getUser(username)
+  console.log(result);
+  if ( result === undefined || result === null) {
         try {
-          await createUser(username, password, email_id);
-          performLogin(res,req.body.username, req.body.password) 
+          await createUser(username,email_id,password);
+          performLogin(res,username,password) 
           .then( (token) => {
             res.status(200);
             res.send({token});
@@ -33,19 +32,15 @@ async function HandleUserRegister(req,res,next) {
           next(err);
         }
       } else {
-          console.log("iam already in db")
+          console.log("Iam already in db")
           const err = new Error("You have already registered");
           err.code = 400;
           next(err);
       }
-    })
-    .catch((err) => {
-      next(err);
-    });
 }
 
 function HandleUserLogin(req,res,next) {
-  checkIfLogin(req.cookies.__RT__)
+  checkIfLogin(req.cookies.__AT__)
     .then((token) => {
       res.send({token})
     })
@@ -65,24 +60,14 @@ async function HandleUserLogout(req, res, next) {
   console.log("Into Handle user LogOut")
   console.log(req.cookies);
   res.clearCookie('__AT__',{sameSite: 'none', secure: true} );
-  res.clearCookie('__RT__',{sameSite: 'none', secure: true });
-  checkIfLogin(req.cookies.__RT__)
-    .then((userData) => {
-     performLogout(req.cookies.__RT__,userData)
-        .then(
-          () => {
-            res.send({message:"Logged out successfully"})
-            console.log("User Logged out")
-          }
-        )
-        .catch((err) => {
-          console.log(err)
-        })
-    })
-    .catch((err) => {
-      next(err);
-    })
+  res.send({message:"Logged out successfully"})
+  console.log("User Logged out")
+          
 }
 
-module.exports = {  HandleUserLogin, HandleUserRegister, HandleUserLogout};
+module.exports = {  
+  HandleUserLogin, 
+  HandleUserRegister, 
+  HandleUserLogout
+};
 
