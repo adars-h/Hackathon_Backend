@@ -8,6 +8,9 @@ const {
   performLogin
 } = require("../../Services/Auth/LoginService");
 
+const {
+   haveCodeforces
+} = require("../../Helpers/Auth/codeforces");
 async function HandleUserRegister(req,res,next) {
   const { 
     username, 
@@ -18,16 +21,21 @@ async function HandleUserRegister(req,res,next) {
   const result = await getUser(username)
   console.log(result);
   if ( result === undefined || result === null) {
-        try {
-          await createUser(username,email_id,password);
-          performLogin(res,username,password) 
-          .then( (token) => {
-            res.status(200);
-            res.send({token});
-          })
-          .catch((err) => {
-            next(err);
-          })
+        try {   
+           const verify = await haveCodeforces(username,email_id);
+           if ( verify.code != 404 ) {
+                await createUser(username,email_id,password);
+                performLogin(res,username,password) 
+                .then( (token) => {
+                  res.status(200);
+                  res.send({token});
+                })
+                .catch((err) => {
+                  next(err);
+                })
+          } else {
+             res.send(verify);
+          }
         } catch (err) {
           next(err);
         }
