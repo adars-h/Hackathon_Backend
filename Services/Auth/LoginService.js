@@ -33,7 +33,7 @@ function performLogin(res,username, password) {
   return new Promise(async (resolve, reject) => {
     console.log(username);
     const data = await getUser(username);
-    if (data !== undefined && password === data.password) {
+    if (data !== null && password === data.password) {
           try {
             const token = await signAllTokens(data);
             res.cookie('__AT__', token, {

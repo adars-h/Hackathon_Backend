@@ -31,7 +31,7 @@ const fetch = (...args) =>
          } else {
              resolve( {
                  code: 404,
-                 message: "Some error occured please try again"
+                 message: response.comment
              })
          }
     }).catch(err => {

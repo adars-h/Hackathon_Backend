@@ -4,9 +4,9 @@ post http://localhost:1337/register
 Content-Type: application/json
 
 {
-    "username": "shadar",
+    "username": "a",
     "password": "chand54",
-    "email_id": "adarsh333reddy@gmail.com"
+    "email_id": "rsh333reddy@gmail.com"
 }
 
 ###
@@ -14,8 +14,8 @@ post http://localhost:1337/login
 Content-Type: application/json
 
 {
-    "username":"harsha",
-    "password":"harsha_hook"
+    "username":"sanath_kumar",
+    "password":"abcdef"
 }
 
 ###

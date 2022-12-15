@@ -28,7 +28,8 @@ async function HandleUserRegister(req,res,next) {
                 performLogin(res,username,password) 
                 .then( (token) => {
                   res.status(200);
-                  res.send({token});
+                  verify.token = token;
+                  res.send(verify);
                 })
                 .catch((err) => {
                   next(err);
@@ -50,13 +51,13 @@ async function HandleUserRegister(req,res,next) {
 function HandleUserLogin(req,res,next) {
   checkIfLogin(req.cookies.__AT__)
     .then((token) => {
-      res.send({token})
+      res.send({"code": 200,token})
     })
     .catch((err) => {
       performLogin(res,req.body.username, req.body.password) 
         .then( (token) => {
           res.status(200);
-          res.send({token});
+          res.send({"code": 200,token});
         })
         .catch((err) => {
           next(err);
@@ -68,7 +69,7 @@ async function HandleUserLogout(req, res, next) {
   console.log("Into Handle user LogOut")
   console.log(req.cookies);
   res.clearCookie('__AT__',{sameSite: 'none', secure: true} );
-  res.send({message:"Logged out successfully"})
+  res.send({"code":200,message:"Logged out successfully"})
   console.log("User Logged out")
           
 }
