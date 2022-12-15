@@ -11,6 +11,8 @@ const {
 const {
    haveCodeforces
 } = require("../../Helpers/Auth/codeforces");
+
+
 async function HandleUserRegister(req,res,next) {
   const { 
     username, 
@@ -48,6 +50,38 @@ async function HandleUserRegister(req,res,next) {
       }
 }
 
+
+async function HandleUserRegisterJee(req,res,next) {
+  const { 
+    username, 
+    password, 
+    email_id 
+  } = req.body;
+  const result = await getUser(username)
+  console.log(result);
+  if ( result === undefined || result === null) {
+        try {   
+            await createUser(username,email_id,password);
+            performLogin(res,username,password) 
+            .then( (token) => {
+              res.status(200);
+              res.send({"code":200,token});
+            })
+            .catch((err) => {
+              next(err);
+            })
+        } catch (err) {
+            next(err);
+        }
+      } else {
+          console.log("Iam already in db")
+          const err = new Error("You have already registered");
+          err.code = 400;
+          next(err);
+      }
+}
+
+
 function HandleUserLogin(req,res,next) {
   checkIfLogin(req.cookies.__AT__)
     .then((token) => {
@@ -77,6 +111,7 @@ async function HandleUserLogout(req, res, next) {
 module.exports = {  
   HandleUserLogin, 
   HandleUserRegister, 
+  HandleUserRegisterJee,
   HandleUserLogout
 };
 

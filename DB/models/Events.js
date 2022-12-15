@@ -12,6 +12,17 @@ const EventsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    candidatesInfo:[{
+        username:{
+            type:String,
+            required:true
+        },
+        score:{
+            type:Number,
+            required:true
+            
+        }
+    }]
 });
 
 const Events = mongoose.model("Events", EventsSchema);

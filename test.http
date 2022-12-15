@@ -1,12 +1,12 @@
 
 ###
-post http://localhost:1337/register
+post http://localhost:1337/register/jee
 Content-Type: application/json
 
 {
-    "username": "a",
-    "password": "chand54",
-    "email_id": "rsh333reddy@gmail.com"
+    "username": "sdfr",
+    "password": "shadar",
+    "email_id": "adarsh333reddy@gmail.com"
 }
 
 ###
@@ -114,8 +114,3 @@ Content-Type: application/json
 
 ###
 get http://localhost:1337/post/likes/1
-
-
-
-
-
