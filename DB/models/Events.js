@@ -5,7 +5,7 @@ const EventsSchema = new mongoose.Schema({
         required: true,
     },
     date: {
-        type: Date,
+        type: Number,
         required: true,
     },
     section: {
@@ -34,7 +34,6 @@ const EventsSchema = new mongoose.Schema({
 const Events = mongoose.model("Events", EventsSchema);
 
 async function getEvents(section) {
-    console.log("section : ", section);
     const data = await Events.find({ section: section });
     return data;
 }
@@ -48,7 +47,31 @@ async function createEvent(name, date, section, type) {
     });
     return res;
 }
+async function addCandidate(eventID, username) {
+    const res = await Events.updateOne(
+        { _id: eventID },
+        { $push: { candidatesInfo: { username: username } } }
+    );
+    return res;
+}
+async function removeCandidate(eventID, username) {
+    const res = await Events.updateOne(
+        { _id: eventID },
+        { $pull: { candidatesInfo: { username: username } } }
+    );
+    return res;
+}
+async function updateScoreCandidate(eventID, username, score) {
+    const res = await Events.updateOne(
+        { _id: eventID, "candidatesInfo.username": username },
+        { $set: { "candidatesInfo.$.score": score } }
+    );
+    return res;
+}
 module.exports = {
     getEvents,
     createEvent,
+    addCandidate,
+    updateScoreCandidate,
+    removeCandidate,
 };

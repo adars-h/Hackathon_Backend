@@ -2,10 +2,30 @@ post http://localhost:1337/events/createEvent
 Content-Type: application/json
 
 {
-    "name": "weekend test 1",
-    "date": "Fri Dec 16 2022 18:18:33 GMT+0530",
+    "name": "discussion",
+    "date": 1671219621799,
     "section": "JEE",
     "type":"exam"
+}
+
+###
+post http://localhost:1337/events/updateScore
+Content-Type: application/json
+
+{
+    "eventID": "639c8c823fc8663c56de3b15",
+    "username":"sktime1",
+    "score":100
+}
+
+
+###
+post http://localhost:1337/events/register
+Content-Type: application/json
+
+{
+    "username": "sanath_kumar",
+    "eventID": "639c451c8e26e9f3cdd10cf9"
 }
 
 ###
