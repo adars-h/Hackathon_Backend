@@ -1,5 +1,10 @@
-const { ObjectId } = require('mongodb');
-const { getEvents, getEventsById, createEvent, getScore } = require("../DB/models/Events");
+const { ObjectId } = require("mongodb");
+const {
+    getEvents,
+    getEventsById,
+    createEvent,
+    getScore,
+} = require("../DB/models/Events");
 
 const {
     addCandidate,
@@ -17,7 +22,7 @@ async function getEventsController(req, res, next) {
 }
 async function getEventsByIdController(req, res, next) {
     // console.log(`req.query.examId: ${req.query.examId}`);
-    const examId  = req.query.examId;
+    const examId = req.query.examId;
     try {
         // console.log(`controller filter: {_id: ${new ObjectId(examId)}}`);
         const result = await getEventsById(examId);
@@ -29,7 +34,7 @@ async function getEventsByIdController(req, res, next) {
 
 async function getScoreController(req, res, next) {
     const { answers, examId } = req.body;
-    console.log(`asnwers, ${req.body}`)
+    console.log(`asnwers, ${req.body}`);
     try {
         const score = await getScore(answers, examId);
         res.send({ code: 200, data: score });
@@ -39,25 +44,15 @@ async function getScoreController(req, res, next) {
 }
 
 async function createEventController(req, res, next) {
-    const { name, date, section, type, candidatesInfo, questions } = req.body;
-    const date_dt = new Date(date);
+    const { name, date, section, type, questions } = req.body;
     try {
-        const result = await createEvent(name, date_dt, section, type, candidatesInfo, questions);
-    const { name, date, section, type } = req.body;
-    try {
-        const result = await createEvent(name, date, section, type);
+        const result = await createEvent(name, date, section, type, questions);
         res.send({ code: 200, data: "Event created" });
     } catch (err) {
         next(err);
     }
 }
 
-
-module.exports = {
-    getEventsController,
-    getEventsByIdController,
-    getScoreController,
-    createEventController
 async function registerCandidate(req, res, next) {
     const { username, eventID } = req.body;
     try {
@@ -91,4 +86,6 @@ module.exports = {
     registerCandidate,
     deregisterCandidate,
     updateScore,
+    getScoreController,
+    getEventsByIdController,
 };
