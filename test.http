@@ -8,6 +8,61 @@ Content-Type: application/json
     "type":"exam"
 }
 
+### post questions
+post http://localhost:1337/events/getScore
+Content-Type: application/json
+
+{
+    "examId": "639cc998bd45e053c09184bc",
+    "answers":[
+        {
+            "questionId":"639cc998bd45e053c09184bd",
+            "answer":[false, true, false, false]
+        },
+        {
+            "questionId":"639cc998bd45e053c09184be",
+            "answer":[false, true, false, false]
+        },
+        {
+            "questionId":"639cc998bd45e053c09184bf",
+            "answer":[false, true, false, false]
+        }
+    ]
+}
+
+### post questions
+post http://localhost:1337/events/createEvent
+Content-Type: application/json
+
+{
+    "name": "",
+    "questions":[
+        {
+            "subjectType":"Maths",
+            "questionDesc":"1+2",
+            "answer":[false, true, false, false],
+            "options":["0", "3", "4", "5"]
+        },
+        {
+            "subjectType":"Physics",
+            "questionDesc":"gravity",
+            "answer":[false, true, false, false],
+            "options":["9.9", "9.8", "10.1", "10"]
+        },
+        {
+            "subjectType":"Chemistry",
+            "questionDesc":"acid",
+            "answer":[false, true, false, false],
+            "options":["PO5", "HCl", "CaCo3", "NaOH"]
+        }
+    ]
+}
+
+
+### get questions
+get http://localhost:1337/events/getQuestions?examId=639cc998bd45e053c09184bc
+Content-Type: application/json
+
 ###
 post http://localhost:1337/register/jee
 Content-Type: application/json
