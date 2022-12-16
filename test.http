@@ -2,9 +2,9 @@ post http://localhost:1337/events/createEvent
 Content-Type: application/json
 
 {
-    "name": "discussion",
-    "date": 1671229521292,
-    "section": "JEE",
+    "name": "round 321",
+    "date": 1671233545813,
+    "section": "codeforces",
     "type":"discussion"
 }
 
@@ -35,7 +35,10 @@ post http://localhost:1337/events/createEvent
 Content-Type: application/json
 
 {
-    "name": "",
+    "name": "round 321",
+    "date": 1671233050625,
+    "section": "JEE",
+    "type":"discussion",
     "questions":[
         {
             "subjectType":"Maths",

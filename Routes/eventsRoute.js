@@ -3,7 +3,7 @@ const {
     getEventsController,
     createEventController,
     getEventsByIdController,
-    getScoreController
+    getScoreController,
     registerCandidate,
     deregisterCandidate,
     updateScore,
