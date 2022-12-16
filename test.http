@@ -1,12 +1,21 @@
-
-###
-post http://localhost:1337/register
+post http://localhost:1337/events/createEvent
 Content-Type: application/json
 
 {
-    "username": "chand",
-    "password": "chand54",
-    "email_id": "chand@gmail.com"
+    "name": "weekend test 1",
+    "date": "Fri Dec 16 2022 18:18:33 GMT+0530",
+    "section": "JEE",
+    "type":"exam"
+}
+
+###
+post http://localhost:1337/register/jee
+Content-Type: application/json
+
+{
+    "username": "sdfr",
+    "password": "shadar",
+    "email_id": "adarsh333reddy@gmail.com"
 }
 
 ###
@@ -14,8 +23,8 @@ post http://localhost:1337/login
 Content-Type: application/json
 
 {
-    "username":"harsha",
-    "password":"harsha_hook"
+    "username":"sanath_kumar",
+    "password":"abcdef"
 }
 
 ###
