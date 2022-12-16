@@ -115,7 +115,42 @@ Content-Type: application/json
 ###
 get http://localhost:1337/post/likes/1
 
+### Get all Questions
+get http://localhost:1337/question/all?examId=639b802c00e2f12db658a030
+Content-Type: application/json
 
 
+### Post a question
+post http://localhost:1337/question/question
+Content-Type: application/json
 
+{
+        "examId":"639b802c00e2f12db658a030",
+        "subjectType":"Maths",
+        "questionDescription":"1+2",
+        "answer":[false, true, false, false],
+        "options":["0", "3", "4", "5"]
+} 
 
+### exam info
+post http://localhost:1337/exam/examInfo
+Content-Type: application/json
+
+{
+    "examName":"Weekend",
+    "examType":"JEE",
+    "examDate":"Thu Apr 03 2014"
+}
+
+#### ubidots
+post https://industrial.api.ubidots.com/api/v1.6/variables/639b7582e08182000e509e82/values
+Content-Type: application/json
+X-Auth-Token: BBFF-ZL79ZGgIK6SUE8qMOlprUzd621EYG6
+
+{
+    "value": 10,
+    "timestamp": 1634311791000,
+    "context": {
+      "status": "cold"
+    }
+}
