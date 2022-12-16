@@ -3,9 +3,9 @@ Content-Type: application/json
 
 {
     "name": "discussion",
-    "date": 1671219621799,
+    "date": 1671229521292,
     "section": "JEE",
-    "type":"exam"
+    "type":"discussion"
 }
 
 ### post questions
