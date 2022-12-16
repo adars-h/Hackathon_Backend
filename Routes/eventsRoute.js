@@ -2,6 +2,8 @@ const { Router } = require("express");
 const {
     getEventsController,
     createEventController,
+    getEventsByIdController,
+    getScoreController
     registerCandidate,
     deregisterCandidate,
     updateScore,
@@ -10,6 +12,8 @@ const {
 const eventsRouter = Router();
 
 eventsRouter.post("/getEvents", getEventsController);
+eventsRouter.get("/getQuestions", getEventsByIdController);
+eventsRouter.post("/getScore", getScoreController);
 eventsRouter.post("/createEvent", createEventController);
 eventsRouter.post("/register", registerCandidate);
 eventsRouter.post("/deregister", deregisterCandidate);

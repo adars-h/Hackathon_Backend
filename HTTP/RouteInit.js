@@ -7,8 +7,8 @@ function routeInit(app)
     initDatabase()
     .then(console.log)
     .catch(console.error);
-    app.use(authRouter)
-    app.use('/events',eventRouter);
+    app.use('/',authRouter)
+    app.use('/events', eventRouter);
 }
 
 module.exports = routeInit;
