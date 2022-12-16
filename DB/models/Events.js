@@ -31,7 +31,7 @@ const EventsSchema = new mongoose.Schema({
         default: () => Date.now() + 7 * 24 * 60 * 60 * 1000
     },
     date: {
-        type: Date,
+        type: Number,
         required: true,
     },
     section: {
@@ -96,7 +96,6 @@ async function createEvent(name, date, section, type, candidatesInfo, questions)
 }
 
 async function getEvents(section) {
-    console.log("section : ", section);
     const data = await Events.find({ section: section });
     return data;
 }
@@ -146,9 +145,34 @@ async function getScore(answers, examId) {
     const totalScore=ResultEvaluationObject.calulateScore(answers,keys)
     return totalScore
 }
+async function addCandidate(eventID, username) {
+    const res = await Events.updateOne(
+        { _id: eventID },
+        { $push: { candidatesInfo: { username: username } } }
+    );
+    return res;
+}
+async function removeCandidate(eventID, username) {
+    const res = await Events.updateOne(
+        { _id: eventID },
+        { $pull: { candidatesInfo: { username: username } } }
+    );
+    return res;
+}
+async function updateScoreCandidate(eventID, username, score) {
+    const res = await Events.updateOne(
+        { _id: eventID, "candidatesInfo.username": username },
+        { $set: { "candidatesInfo.$.score": score } }
+    );
+    return res;
+}
 module.exports = {
     getEvents,
     getEventsById,
     getScore,
     createEvent
+    createEvent,
+    addCandidate,
+    updateScoreCandidate,
+    removeCandidate,
 };
