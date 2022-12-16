@@ -1,3 +1,12 @@
+post http://localhost:1337/events/createEvent
+Content-Type: application/json
+
+{
+    "name": "weekend test 1",
+    "date": "Fri Dec 16 2022 18:18:33 GMT+0530",
+    "section": "JEE",
+    "type":"exam"
+}
 
 ###
 post http://localhost:1337/register/jee
