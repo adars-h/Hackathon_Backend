@@ -61,9 +61,16 @@ async function getScoreController(req, res, next) {
     }
 }
 async function createEventController(req, res, next) {
-    const { name, date, section, type, questions } = req.body;
+    const { name, date, section, type, questions, candidateInfo } = req.body;
     try {
-        const result = await createEvent(name, date, section, type, questions);
+        const result = await createEvent(
+            name,
+            date,
+            section,
+            type,
+            candidateInfo,
+            questions
+        );
         res.send({ code: 200, data: "Event created" });
     } catch (err) {
         next(err);
