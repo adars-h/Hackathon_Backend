@@ -9,6 +9,7 @@ const {
     updateScore,
     getScoreController,
     getCandidatesByIdController,
+    addRequestController,
 } = require("../Controllers/eventController");
 
 const eventsRouter = Router();
@@ -18,6 +19,7 @@ eventsRouter.get("/getQuestions", getQuestionsByIdController);
 eventsRouter.post("/getCandidates", getCandidatesByIdController);
 eventsRouter.post("/calculateScore", calculateScoreController);
 eventsRouter.post("/getScore", getScoreController);
+eventsRouter.post("/addRequest", addRequestController);
 eventsRouter.post("/createEvent", createEventController);
 eventsRouter.post("/register", registerCandidate);
 eventsRouter.post("/deregister", deregisterCandidate);

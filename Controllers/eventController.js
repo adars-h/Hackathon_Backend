@@ -9,6 +9,7 @@ const {
     updateScoreCandidate,
     getCandidatesById,
     getScore,
+    addRequest,
 } = require("../DB/models/Events");
 
 async function getEventsBySectionController(req, res, next) {
@@ -56,6 +57,15 @@ async function getScoreController(req, res, next) {
     try {
         const result = await getScore(examId, username);
         res.send({ code: 200, message: result });
+    } catch (err) {
+        next(err);
+    }
+}
+async function addRequestController(req, res, next) {
+    const { username_a, username_b, score_a } = req.body;
+    try {
+        const result = await addRequest(username_b, username_a, score_a);
+        res.send({ code: 200, data: result, message: "request added" });
     } catch (err) {
         next(err);
     }
@@ -123,4 +133,5 @@ module.exports = {
     getQuestionsByIdController,
     getCandidatesByIdController,
     getScoreController,
+    addRequestController,
 };
