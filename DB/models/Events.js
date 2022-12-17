@@ -66,6 +66,18 @@ const EventsSchema = new mongoose.Schema({
                     },
                 },
             ],
+            requestsSent: [
+                {
+                    username: {
+                        type: String,
+                        required: true,
+                    },
+                    score: {
+                        type: Number,
+                        required: true,
+                    },
+                },
+            ],
         },
     ],
     questions: [QuestionSchema],
@@ -90,7 +102,7 @@ async function createEvent(
     });
     return res;
 }
-async function addRequest(eventID, username_b, username_a, score_a) {
+async function addRequest(eventID, username_b, score_b, username_a, score_a) {
     const data = await Events.updateOne(
         { _id: eventID, "candidatesInfo.username": username_b },
         {
@@ -98,6 +110,17 @@ async function addRequest(eventID, username_b, username_a, score_a) {
                 "candidatesInfo.$.requests": {
                     username: username_a,
                     score: score_a,
+                },
+            },
+        }
+    );
+    const res = await Events.updateOne(
+        { _id: eventID, "candidatesInfo.username": username_a },
+        {
+            $push: {
+                "candidatesInfo.$.requestsSent": {
+                    username: username_b,
+                    score: score_b,
                 },
             },
         }

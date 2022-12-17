@@ -1,3 +1,4 @@
+const { SocketClosedUnexpectedlyError } = require("redis");
 const socketio = require("socket.io");
 const { Server } = require("socket.io");
 const { addRequest } = require("../DB/models/Events");
@@ -9,16 +10,23 @@ function SocketInit(app, server) {
         },
     });
     io.on("connect", (socket) => {
-        console.log("client connected");
-        socket.on("join_room", (data) => socket.join(data));
+        socket.on("join_room", (data) => {
+            const temp = data.room.toString();
+            console.log("client connected : ", temp, typeof temp);
+            socket.join(temp);
+        });
         socket.on("send_message", async (data) => {
-            socket.to(data.room).emit("receive_message", {
+            let room = data.room;
+            console.log("room : ", room, typeof room);
+            socket.to(room).emit("receive_message", {
                 username: data.username,
                 score: data.score,
             });
+            console.log("sent to : ", room);
             await addRequest(
                 data.eventID,
                 data.room,
+                data.room_score,
                 data.username,
                 data.score
             );
