@@ -77,8 +77,8 @@ async function createEvent(
     date,
     section,
     type,
-    candidatesInfo = null,
-    questions = null
+    candidatesInfo = [],
+    questions = []
 ) {
     const res = await Events.create({
         name: name,
@@ -90,7 +90,20 @@ async function createEvent(
     });
     return res;
 }
-
+async function addRequest(eventID, username_b, username_a, score_a) {
+    const data = await Events.updateOne(
+        { _id: eventID, "candidatesInfo.username": username_b },
+        {
+            $push: {
+                "candidatesInfo.$.requests": {
+                    username: username_a,
+                    score: score_a,
+                },
+            },
+        }
+    );
+    return data;
+}
 async function getEvents(section) {
     const data = await Events.find({ section: section });
     return data;
@@ -173,4 +186,5 @@ module.exports = {
     removeCandidate,
     getCandidatesById,
     getScore,
+    addRequest,
 };
