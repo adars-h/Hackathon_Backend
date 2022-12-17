@@ -26,7 +26,7 @@ function ServerInit(conf) {
             : "Configure in Production Mode"
     );
 
-    app.listen(conf.primaryInfo.serverPort, () => {
+    const server = app.listen(conf.primaryInfo.serverPort, () => {
         console.log(
             `Server is listening on Port ${conf.primaryInfo.serverPort}`
         );
@@ -37,7 +37,7 @@ function ServerInit(conf) {
         console.log(req.url);
         next();
     });
-    return app;
+    return { app: app, server: server };
 }
 
 module.exports = ServerInit;
