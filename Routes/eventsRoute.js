@@ -1,18 +1,22 @@
 const { Router } = require("express");
 const {
-    getEventsController,
+    getEventsBySectionController,
     createEventController,
-    getEventsByIdController,
-    getScoreController,
+    getQuestionsByIdController,
+    calculateScoreController,
     registerCandidate,
     deregisterCandidate,
     updateScore,
+    getScoreController,
+    getCandidatesByIdController,
 } = require("../Controllers/eventController");
 
 const eventsRouter = Router();
 
-eventsRouter.post("/getEvents", getEventsController);
-eventsRouter.get("/getQuestions", getEventsByIdController);
+eventsRouter.post("/getEvents", getEventsBySectionController);
+eventsRouter.get("/getQuestions", getQuestionsByIdController);
+eventsRouter.post("/getCandidates", getCandidatesByIdController);
+eventsRouter.post("/calculateScore", calculateScoreController);
 eventsRouter.post("/getScore", getScoreController);
 eventsRouter.post("/createEvent", createEventController);
 eventsRouter.post("/register", registerCandidate);

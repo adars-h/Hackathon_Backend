@@ -96,7 +96,7 @@ async function getQuestionsByExamId(examId) {
 }
 
 // can cache results when an examid is requested
-async function getEventsById(examId) {
+async function getQuestionsById(examId) {
     const data = await getQuestionsByExamId(examId);
     const {
         questions: questionsWithAnswers,
@@ -114,14 +114,27 @@ async function getEventsById(examId) {
     };
     return dataWithoutAnswers;
 }
-
+async function getCandidatesById(examId) {
+    const { candidatesInfo } = await Events.findOne({
+        _id: new ObjectId(examId),
+    });
+    return candidatesInfo;
+}
 // answers of form <id, chosenArr>
-async function getScore(answers, examId) {
+async function calculateScoreInExam(answers, examId, username) {
     const questions = await getQuestionsByExamId(examId);
-    // console.log("questions : ", questions);
     const keys = questions.questions.map(({ answer: ar, ...rest }) => ar);
-    const totalScore = ResultEvaluationObject.calulateScore(answers, keys);
+    const totalScore = ResultEvaluationObject.calculateScore(answers, keys);
+    updateScoreCandidate(examId, username, totalScore);
     return totalScore;
+}
+async function getScore(eventId, username) {
+    const res = await Events.findOne({
+        _id: eventId,
+        "candidatesInfo.username": username,
+    }).select({ candidatesInfo: { $elemMatch: { username: username } } });
+    console.log("result in getScore: ", res);
+    return res;
 }
 async function addCandidate(eventID, username) {
     const res = await Events.updateOne(
@@ -146,10 +159,12 @@ async function updateScoreCandidate(eventID, username, score) {
 }
 module.exports = {
     getEvents,
-    getEventsById,
-    getScore,
+    getQuestionsById,
+    calculateScoreInExam,
     createEvent,
     addCandidate,
     updateScoreCandidate,
     removeCandidate,
+    getCandidatesById,
+    getScore,
 };

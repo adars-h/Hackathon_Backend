@@ -1,17 +1,17 @@
 const { ObjectId } = require("mongodb");
 const {
     getEvents,
-    getEventsById,
+    getQuestionsById,
     createEvent,
-    getScore,
-} = require("../DB/models/Events");
-
-const {
+    calculateScoreInExam,
     addCandidate,
     removeCandidate,
     updateScoreCandidate,
+    getCandidatesById,
+    getScore,
 } = require("../DB/models/Events");
-async function getEventsController(req, res, next) {
+
+async function getEventsBySectionController(req, res, next) {
     const { section } = req.body;
     try {
         const result = await getEvents(section);
@@ -20,29 +20,46 @@ async function getEventsController(req, res, next) {
         next(err);
     }
 }
-async function getEventsByIdController(req, res, next) {
-    // console.log(`req.query.examId: ${req.query.examId}`);
+async function getQuestionsByIdController(req, res, next) {
     const examId = req.query.examId;
     try {
-        // console.log(`controller filter: {_id: ${new ObjectId(examId)}}`);
-        const result = await getEventsById(examId);
+        const result = await getQuestionsById(examId);
         res.send({ code: 200, data: result });
     } catch (err) {
         next(err);
     }
 }
 
+async function calculateScoreController(req, res, next) {
+    const { answers, examId, username, section, contestID } = req.body;
+    if (section == "codeforces") {
+        let endpoint = "https://codeforces.com/api/contest.standings?";
+        endpoint += `contestId=${contestID}&handle=${username}`;
+        fetch(endpoint)
+            .then((response) => response.json())
+            .then((data) => {
+                res.send({ code: 200, data: data.result.row.points });
+            });
+    } else if (section == "codechef") {
+    } else {
+        console.log(`asnwers, ${req.body}`);
+        try {
+            const score = await calculateScoreInExam(answers, examId, username);
+            res.send({ code: 200, data: score });
+        } catch (err) {
+            next(err);
+        }
+    }
+}
 async function getScoreController(req, res, next) {
-    const { answers, examId } = req.body;
-    console.log(`asnwers, ${req.body}`);
+    const { username, examId } = req.body;
     try {
-        const score = await getScore(answers, examId);
-        res.send({ code: 200, data: score });
+        const result = await getScore(examId, username);
+        res.send({ code: 200, message: result });
     } catch (err) {
         next(err);
     }
 }
-
 async function createEventController(req, res, next) {
     const { name, date, section, type, questions } = req.body;
     try {
@@ -80,12 +97,23 @@ async function updateScore(req, res, next) {
         next(err);
     }
 }
+async function getCandidatesByIdController(req, res, next) {
+    const { eventID } = req.body;
+    try {
+        const result = await getCandidatesById(eventID);
+        res.send({ code: 200, message: result });
+    } catch (err) {
+        next(err);
+    }
+}
 module.exports = {
-    getEventsController,
+    getEventsBySectionController,
     createEventController,
     registerCandidate,
     deregisterCandidate,
     updateScore,
+    calculateScoreController,
+    getQuestionsByIdController,
+    getCandidatesByIdController,
     getScoreController,
-    getEventsByIdController,
 };
