@@ -54,35 +54,41 @@ const EventsSchema = new mongoose.Schema({
                 type: Number,
                 required: true,
             },
+            requests: [
+                {
+                    username: {
+                        type: String,
+                        required: true,
+                    },
+                    score: {
+                        type: Number,
+                        required: true,
+                    },
+                },
+            ],
         },
     ],
     questions: [QuestionSchema],
 });
 const Events = mongoose.model("Events", EventsSchema);
 
-async function createEvent(name, date, section, type, questions = null) {
-    console.log(name, date, section, type);
-    if (questions === undefined || questions === null) {
-        const res = await Events.create({
-            name: name,
-            date: date,
-            section: section,
-            type: type,
-        });
-        return res;
-    } else if (questions !== undefined || questions !== null) {
-        const res = await Events.create({
-            name: name,
-            date: date,
-            section: section,
-            type: type,
-            questions: questions,
-        });
-        return res;
-    } else {
-        console.log("Invalid Args");
-        return undefined;
-    }
+async function createEvent(
+    name,
+    date,
+    section,
+    type,
+    candidatesInfo = null,
+    questions = null
+) {
+    const res = await Events.create({
+        name: name,
+        date: date,
+        section: section,
+        type: type,
+        candidatesInfo: candidatesInfo,
+        questions: questions,
+    });
+    return res;
 }
 
 async function getEvents(section) {
