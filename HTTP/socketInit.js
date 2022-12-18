@@ -30,6 +30,32 @@ function SocketInit(app, server) {
                 data.score
             );
         });
+        socket.on("random_pairing", (data) => {
+            user.add(JSON.stringify({
+              username: data.username,
+              score: data.score,
+              room: data.room
+           }));
+            if ( user.size === 2 ) {
+               let res = []
+               let uuid = uuidv4();
+               let room = "";
+               for ( item of user ) {
+                    item = JSON.parse(item);
+                    item.uuid = uuid;
+                    res.push(item);
+                    if ( room !== "" ) 
+                     room = item.room
+               }
+               socket.to(data.room).emit("receive_link",{
+                  res
+               })
+               socket.to(room).emit("receive_link",{
+                  res
+               })
+               user.clear();
+            }
+        })
     });
     return io;
 }
