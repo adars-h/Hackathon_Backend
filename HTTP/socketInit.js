@@ -1,3 +1,4 @@
+const e = require("cors");
 const { SocketClosedUnexpectedlyError } = require("redis");
 const socketio = require("socket.io");
 const { Server } = require("socket.io");
@@ -11,18 +12,16 @@ function SocketInit(app, server) {
     });
     io.on("connect", (socket) => {
         socket.on("join_room", (data) => {
+            console.log("client connected : ", data);
             const temp = data.room.toString();
-            console.log("client connected : ", temp, typeof temp);
             socket.join(temp);
         });
         socket.on("send_message", async (data) => {
             let room = data.room;
-            console.log("room : ", room, typeof room);
             socket.to(room).emit("receive_message", {
                 username: data.username,
                 score: data.score,
             });
-            console.log("sent to : ", room);
             await addRequest(
                 data.eventID,
                 data.room,
