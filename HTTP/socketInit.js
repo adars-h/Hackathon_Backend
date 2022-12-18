@@ -1,8 +1,11 @@
 const e = require("cors");
-const { SocketClosedUnexpectedlyError } = require("redis");
+const { set } = require("mongoose");
 const socketio = require("socket.io");
 const { Server } = require("socket.io");
 const { addRequest } = require("../DB/models/Events");
+const { v4: uuidv4 } = require("uuid");
+var socketToRoom = {};
+const users = {};
 function SocketInit(app, server) {
     const io = new Server(server, {
         cors: {
@@ -10,6 +13,7 @@ function SocketInit(app, server) {
             methods: ["GET", "POST"],
         },
     });
+    let user = new Set();
     io.on("connect", (socket) => {
         socket.on("join_room", (data) => {
             console.log("client connected : ", data);
@@ -30,41 +34,40 @@ function SocketInit(app, server) {
                 data.score
             );
         });
-        socket.on("join_room_streaming", (msg) => {
-            let room = msg.room;
-            socket.join(room);
-            socket.to(room).emit("user-connected", msg.userId);
 
-            socket.on("disconnect", () => {
-                socket.to(room).emit("user-disconnected", msg.userId);
-            });
+        socket.on("join-room", (roomID, userID) => {
+            console.log("roomID : ", roomID, userID);
+            socket.join(roomID);
+            socket.to(roomID).emit("user-connected", userID);
         });
+
         socket.on("random_pairing", (data) => {
-            user.add(JSON.stringify({
-              username: data.username,
-              score: data.score,
-              room: data.room
-           }));
-            if ( user.size === 2 ) {
-               let res = []
-               let uuid = uuidv4();
-               let room = "";
-               for ( item of user ) {
+            user.add(
+                JSON.stringify({
+                    username: data.username,
+                    score: data.score,
+                    room: data.room,
+                })
+            );
+            if (user.size === 2) {
+                let res = [];
+                let uuid = uuidv4();
+                let room = "";
+                for (item of user) {
                     item = JSON.parse(item);
                     item.uuid = uuid;
                     res.push(item);
-                    if ( room !== "" ) 
-                     room = item.room
-               }
-               socket.to(data.room).emit("receive_link",{
-                  res
-               })
-               socket.to(room).emit("receive_link",{
-                  res
-               })
-               user.clear();
+                    if (room !== "") room = item.room;
+                }
+                socket.to(data.room).emit("receive_link", {
+                    res,
+                });
+                socket.to(room).emit("receive_link", {
+                    res,
+                });
+                user.clear();
             }
-        })
+        });
     });
     return io;
 }
