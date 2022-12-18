@@ -30,6 +30,15 @@ function SocketInit(app, server) {
                 data.score
             );
         });
+        socket.on("join_room_streaming", (msg) => {
+            let room = msg.room;
+            socket.join(room);
+            socket.to(room).emit("user-connected", msg.userId);
+
+            socket.on("disconnect", () => {
+                socket.to(room).emit("user-disconnected", msg.userId);
+            });
+        });
     });
     return io;
 }
