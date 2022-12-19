@@ -97,14 +97,21 @@ async function addRoomLinkController(req, res, next) {
     }
 }
 async function createEventController(req, res, next) {
-    const { name, date, section, type, questions, candidateInfo } = req.body;
+    const {
+        name,
+        date,
+        section,
+        type,
+        questions,
+        candidatesInfo = [],
+    } = req.body;
     try {
         const result = await createEvent(
             name,
             date,
             section,
             type,
-            candidateInfo,
+            candidatesInfo,
             questions
         );
         res.send({ code: 200, data: "Event created" });
