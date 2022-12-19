@@ -1,6 +1,5 @@
 const RemoveAnswersObject = require("../../Helpers/Question/RemoveAnswers");
-const ResultEvaluationObject = require("../../Helpers/Question/ResultEvaluation");
-
+const { calculateScore } = require("../../Helpers/Question/ResultEvaluation");
 const mongoose = require("mongoose");
 const { ObjectId } = require("mongodb");
 
@@ -78,6 +77,26 @@ const EventsSchema = new mongoose.Schema({
                     },
                 },
             ],
+            roomLinks: [
+                {
+                    uuid: {
+                        type: String,
+                        required: true,
+                    },
+                    username: {
+                        type: String,
+                        required: true,
+                    },
+                    score: {
+                        type: String,
+                        required: true,
+                    },
+                    timestamp: {
+                        type: Number,
+                        required: true,
+                    },
+                },
+            ],
         },
     ],
     questions: [QuestionSchema],
@@ -133,7 +152,7 @@ async function getEvents(section) {
 }
 
 async function getQuestionsByExamId(examId) {
-    const data = await Events.findOne({ _id: new ObjectId(examId) });
+    const data = await Events.findOne({ _id: examId });
     return data;
 }
 
@@ -165,8 +184,15 @@ async function getCandidatesById(examId) {
 // answers of form <id, chosenArr>
 async function calculateScoreInExam(answers, examId, username) {
     const questions = await getQuestionsByExamId(examId);
-    const keys = questions.questions.map(({ answer: ar, ...rest }) => ar);
-    const totalScore = ResultEvaluationObject.calculateScore(answers, keys);
+    const keys = questions.questions.map(
+        ({ answer: a, subjectType: b, ...rest }) => {
+            return {
+                answer: a,
+                subjectType: b,
+            };
+        }
+    );
+    const totalScore = await calculateScore(answers, keys);
     updateScoreCandidate(examId, username, totalScore);
     return totalScore;
 }
@@ -199,6 +225,51 @@ async function updateScoreCandidate(eventID, username, score) {
     );
     return res;
 }
+
+async function addRoomLink(
+    eventID,
+    username_a,
+    score_a,
+    username_b,
+    score_b,
+    uuid,
+    timestamp
+) {
+    const res = await Events.updateOne(
+        {
+            _id: eventID,
+            "candidatesInfo.username": username_a,
+        },
+        {
+            $push: {
+                "candidatesInfo.$.roomLinks": {
+                    username: username_b,
+                    score: score_b,
+                    uuid: uuid,
+                    timestamp: timestamp,
+                },
+            },
+        }
+    );
+    const res1 = await Events.updateOne(
+        {
+            _id: eventID,
+            "candidatesInfo.username": username_b,
+        },
+        {
+            $push: {
+                "candidatesInfo.$.roomLinks": {
+                    username: username_a,
+                    score: score_a,
+                    uuid: uuid,
+                    timestamp: timestamp,
+                },
+            },
+        }
+    );
+    return res;
+}
+
 module.exports = {
     getEvents,
     getQuestionsById,
@@ -210,4 +281,5 @@ module.exports = {
     getCandidatesById,
     getScore,
     addRequest,
+    addRoomLink,
 };
