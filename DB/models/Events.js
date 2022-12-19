@@ -43,6 +43,10 @@ const EventsSchema = new mongoose.Schema({
         default: "discussion",
         required: true,
     },
+    dependent: {
+        type: String,
+        required: false,
+    },
     candidatesInfo: [
         {
             username: {
@@ -202,8 +206,8 @@ async function getScore(eventId, username) {
         _id: eventId,
         "candidatesInfo.username": username,
     }).select({ candidatesInfo: { $elemMatch: { username: username } } });
-    console.log("result in getScore: ", res);
-    return res;
+    if (res) return res.candidatesInfo[0].score;
+    return null;
 }
 async function addCandidate(eventID, username) {
     const res = await Events.updateOne(

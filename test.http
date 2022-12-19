@@ -8,6 +8,16 @@ Content-Type: application/json
     "type":"discussion"
 }
 
+###
+post http://localhost:1337/events/getScore
+Content-Type: application/json
+
+{
+    "examId": "639f64d3995743ce86d876ed",
+    "username": "vivek1"
+}
+
+
 ### post questions
 post http://localhost:1337/events/getScore
 Content-Type: application/json
