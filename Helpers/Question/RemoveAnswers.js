@@ -4,27 +4,28 @@
 // array of questions to be grouped
 
 const RemoveAnswers = (questions) => {
-    if(questions !==null && questions !== undefined)
-        return questions.map((
-            {
+    if (questions !== null && questions !== undefined) {
+        const temp = questions.map(
+            ({
                 answer: a,
-                quesDesc: q,
+                questionDesc: q,
                 subjectType: s,
                 options: o,
-                _id: i
-            }) => (
-            {
-                quesDesc: q,
+                _id: i,
+            }) => ({
+                questionDesc: q,
                 subjectType: s,
                 options: o,
-                _id: i
+                _id: i,
             })
         );
-        // return questions.map(({questions: qs, ...rest})=>({rest}))
-    else
-        return null
-}
+        return temp;
+    }
+
+    // return questions.map(({questions: qs, ...rest})=>({rest}))
+    else return null;
+};
 
 module.exports = {
-    RemoveAnswers
-}
+    RemoveAnswers,
+};

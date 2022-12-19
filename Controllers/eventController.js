@@ -1,4 +1,4 @@
-const { ObjectId } = require("mongodb");
+const { ObjectId, Timestamp } = require("mongodb");
 const {
     getEvents,
     getQuestionsById,
@@ -10,6 +10,7 @@ const {
     getCandidatesById,
     getScore,
     addRequest,
+    addRoomLink,
 } = require("../DB/models/Events");
 
 async function getEventsBySectionController(req, res, next) {
@@ -23,6 +24,7 @@ async function getEventsBySectionController(req, res, next) {
 }
 async function getQuestionsByIdController(req, res, next) {
     const examId = req.query.examId;
+    console.log("examID : ", examId);
     try {
         const result = await getQuestionsById(examId);
         res.send({ code: 200, data: result });
@@ -32,7 +34,7 @@ async function getQuestionsByIdController(req, res, next) {
 }
 
 async function calculateScoreController(req, res, next) {
-    const { answers, examId, username, section, contestID } = req.body;
+    const { answers, examId, username, section, contestID = 1000 } = req.body;
     if (section == "codeforces") {
         let endpoint = "https://codeforces.com/api/contest.standings?";
         endpoint += `contestId=${contestID}&handle=${username}`;
@@ -43,10 +45,9 @@ async function calculateScoreController(req, res, next) {
             });
     } else if (section == "codechef") {
     } else {
-        console.log(`asnwers, ${req.body}`);
         try {
             const score = await calculateScoreInExam(answers, examId, username);
-            res.send({ code: 200, data: score });
+            res.send({ code: 200, score: score });
         } catch (err) {
             next(err);
         }
@@ -66,6 +67,31 @@ async function addRequestController(req, res, next) {
     try {
         const result = await addRequest(username_b, username_a, score_a);
         res.send({ code: 200, data: result, message: "request added" });
+    } catch (err) {
+        next(err);
+    }
+}
+async function addRoomLinkController(req, res, next) {
+    const {
+        eventID,
+        username_a,
+        username_b,
+        score_a,
+        score_b,
+        uuid,
+        timestamp = Date.now(),
+    } = req.body;
+    try {
+        const res = await addRoomLink(
+            eventID,
+            username_a,
+            score_a,
+            username_b,
+            score_b,
+            uuid,
+            timestamp
+        );
+        res.send({ code: 200, message: "added" });
     } catch (err) {
         next(err);
     }
@@ -134,4 +160,5 @@ module.exports = {
     getCandidatesByIdController,
     getScoreController,
     addRequestController,
+    addRoomLinkController,
 };

@@ -10,6 +10,7 @@ const {
     getScoreController,
     getCandidatesByIdController,
     addRequestController,
+    addRoomLinkController,
 } = require("../Controllers/eventController");
 
 const eventsRouter = Router();
@@ -24,4 +25,5 @@ eventsRouter.post("/createEvent", createEventController);
 eventsRouter.post("/register", registerCandidate);
 eventsRouter.post("/deregister", deregisterCandidate);
 eventsRouter.post("/updateScore", updateScore);
+eventsRouter.post("/addRoomLink", addRoomLinkController);
 module.exports = eventsRouter;
