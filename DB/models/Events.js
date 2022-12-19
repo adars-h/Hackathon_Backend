@@ -192,9 +192,10 @@ async function calculateScoreInExam(answers, examId, username) {
             };
         }
     );
-    const totalScore = await calculateScore(answers, keys);
-    updateScoreCandidate(examId, username, totalScore);
-    return totalScore;
+    console.log();
+    const subScore = await calculateScore(answers, keys);
+    updateScoreCandidate(examId, username, subScore["totalScore"]);
+    return subScore;
 }
 async function getScore(eventId, username) {
     const res = await Events.findOne({
